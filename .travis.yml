@@ -26,9 +26,9 @@ addons:
 
 
 script:
-  - if [[ "${COVERITY_SCAN_BRANCH}" == 1 ]];
+  - if [ "${COVERITY_SCAN_BRANCH}" == 1 ];
        then
-         echo "Don't build on analysis branch.";
+         echo "Do not build on analysis branch.";
 	 exit 0;
     fi
   - make 
