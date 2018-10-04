@@ -1,7 +1,12 @@
 
 # Graphene Library OS with Intel:registered: SGX Support
 
-![Travis Logo](https://travis-ci.org/oscarlab/graphene.svg?branch=master)
+![Travis Logo](https://travis-ci.org/bigdata-memory/graphene.svg?branch=analysis)
+
+<a href="https://scan.coverity.com/projects/graphenesgx">
+  <img alt="Coverity Scan Build Status"
+       src="https://img.shields.io/coverity/scan/16877.svg"/>
+</a>
 
 
 *A Linux-compatible Library OS for Multi-Process Applications*
