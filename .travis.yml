@@ -1,12 +1,16 @@
 language: c
+
 env:
   global:
-  - secure: QOI48RgVp2QVr4p1S14KkSMVfR/MgJwKbnCs5iIMP1SvOGK1p67vEGdYeOJn20yJXtDxDPZJvMm4jWPqR2y+iu2DpJM1vbVoZd7MJoHm00ByWrj+gS5W9b93QdQJPRsjxM0VUluAn6hakpeTKIUTzhWbluOQvAaoek562t3HQVTwBbh89UYgclMsRwRvcgjjIh6Gdkh4OX4HqoORXgur1lUhXZmxYE6KnoKs7gacFtQWx2XTwWcCk995unu5Y7rICMuPGoGe9kZ/Iii1bQQyEelMy2X2KN9Y1NEGlcELihs+N/JqUBwZIENa1+mmxCtSzKNKnKozYhf0/HsANBSs+e89C3bTaOtKGg1Re0t4KgrPTjWsR5rSDO4EJXHDk6MWhNeHXPC4uxje6MV5zlad5REQaocA2oU8DTLsLYms2c5vIkJe/2K+1u4Z6gnhJPg3U7nHWdoe88l7XZ+J4vTw3CN9VzyI+fzi19SPKDQkM14i11XcUzRC/Ql0m8hy624ucN+se6U4ty5lDTwh5tgefZjB9tqSC99ftk1P4qzv1wXF5n5fjn/oEFczRRmR8Fd3IHT6JpI8StXSLAMntiEl1qvlqMCUNdoFg5gXvgL/JlSgYYpCdoNcy01OiccRkJeLM2FBryVli6lSt0KJVtc4hBN96H+P1gd3C0KUgtushJs=
+    - secure: a9nl5YZsyOWJqIj76IWasqOiKqoGKL7KmzSQZLdTgHcm1bnG5V5Nm8FrnKPsSBWI4GRdGmbewPd6bxfONUUWlYSiNs9oTdhBE3HJB1CaK9QDJVgASkb8+o3wTgi7QXuWLQd7FE7owaVTIMOnMX2varK48bAK9zHfWCQfcxElZDGUUhwkTs0raFNgCTTYmUapJcY4vB+Su6pCP57W0VuTQOPfl7x1aEiPYGC4eksyy3oB7Nkw4SsyjctBn8RVHs0K0kpFzu45aI6xgh8OdEedoTveDktzGZW9QDDeQFloIzRksFM/QkVh17HtUk46ec0SkoW63n3OzbYQiXBtPdG7Ha1LyNipB22maGfEXSQ+d8QcM66Smk/pXzJlSJTfTHfP2Jzo0UD1LBFcO0oJ3cLN5seBTQFrjhvDy0kDW0S8YgmcRJz28ZeTG8VEPX30qv4lr19tcX4fpgCLYO889vPbWmMKhZNvF+Q6KXrLU3eIfAiCSc8snVWuDA5l37ZiWp0+gQg1dWI82asfCP5T+fzEoeuGguVEE0zmso9klczbIzF5c5zC6DjAR9DAYuwN6lKy0sShw3PO9YKeYLtOF7FjozuJEFDrf0c5CZEvAbDJn0FLcZKeh9ejM5edhAKRpdZ8LvII3o3NHfNL3n4nSjnpyM1Wzb2AA2HF42S1hJ/t6uw=
+
 before_install:
-- sudo apt-get install python-protobuf python-crypto
-- sudo apt-get install linux-headers-$(uname -r)
+  - sudo apt-get install python-protobuf python-crypto
+  - sudo apt-get install linux-headers-$(uname -r)
+
 before_script:
-- git clone https://github.com/01org/linux-sgx-driver.git -b sgx_driver_$ISGX_DRIVER_VERSION
+  - git clone https://github.com/01org/linux-sgx-driver.git -b sgx_driver_$ISGX_DRIVER_VERSION
+
 addons:
   coverity_scan:
     project:
@@ -15,18 +19,19 @@ addons:
     notification_email: gang1.wang@intel.com
     build_command: make
     branch_pattern: analysis
+
 script:
-- if [ "${COVERITY_SCAN_BRANCH}" == 1 ]; then echo "Do not build on analysis branch.";
-  exit 0; fi
-- make
-- cd $TRAVIS_BUILD_DIR/Pal/src && make clean && make SGX=1
-- cd $TRAVIS_BUILD_DIR/Pal/src && make clean && make DEBUG=1
-- cd $TRAVIS_BUILD_DIR/Pal/src && make clean && make SGX=1 DEBUG=1
-- cd $TRAVIS_BUILD_DIR/Pal/src/host/Linux-SGX/sgx-driver && make
+  - if [ "${COVERITY_SCAN_BRANCH}" == 1 ]; then echo "Do not build on analysis branch.";exit 0; fi
+  - make
+  - cd $TRAVIS_BUILD_DIR/Pal/src && make clean && make SGX=1
+  - cd $TRAVIS_BUILD_DIR/Pal/src && make clean && make DEBUG=1
+  - cd $TRAVIS_BUILD_DIR/Pal/src && make clean && make SGX=1 DEBUG=1
+  - cd $TRAVIS_BUILD_DIR/Pal/src/host/Linux-SGX/sgx-driver && make
+
 matrix:
   include:
-  - os: linux
-    dist: trusty
-    env:
-    - ISGX_DRIVER_PATH=$TRAVIS_BUILD_DIR/linux-sgx-driver
-    - ISGX_DRIVER_VERSION=1.9
+    - os: linux
+      dist: trusty
+      env:
+        - ISGX_DRIVER_PATH=$TRAVIS_BUILD_DIR/linux-sgx-driver
+        - ISGX_DRIVER_VERSION=1.9
