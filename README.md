@@ -3,11 +3,10 @@
 
 ![Travis Logo](https://travis-ci.org/bigdata-memory/graphene.svg?branch=analysis)
 
-<a href="https://scan.coverity.com/projects/graphenesgx">
+<a href="https://scan.coverity.com/projects/bigdata-memory-graphene">
   <img alt="Coverity Scan Build Status"
-       src="https://img.shields.io/coverity/scan/16877.svg"/>
+       src="https://img.shields.io/coverity/scan/16879.svg"/>
 </a>
-
 
 *A Linux-compatible Library OS for Multi-Process Applications*
 
