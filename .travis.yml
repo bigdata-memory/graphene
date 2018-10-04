@@ -1,19 +1,32 @@
 language: c
 
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "ifWPFSoTkAA3uI8vvZ/cynfCO2VIrfaxZu0/awiNQq+hddmzV8n1X9ZVkKgOHlxVnR9DkqqT+WAPJGdnEVqcabuDQYhVeOQ0z1AXyxAxMO9X9d28J5h09VYiO08hwPoggnqKaXsUjkYfPsT1x3V48io1D7Hx4OOCyZHwN11sM9i9A+yk3Bi3AYZrSTHRb8lNv8jbjafo06WrFC9eitN00Yw5VRZL/x6yZ4gFIavHLHu6l1Ml0KTlnk98dZmYEMO2KnOf5aWPLgG3K5TawaerxWkk6A9KNmHrmdZpZnbh8+zbkUyk5OkYdTQPPTEzgj8eYj8iEtXTySSQNus6YQKt0vZkYj7R16EZqnVUV3rm9KtPaBSWkbGwDyNNRUYPt4A4CRcznEJ/7TCHqw84+fXwCm3pjVz7UDj/TpPks/4rDKN+NvPVqkVd+RyfcsrNsr//6VAt7Vyx0Q/eJ5xz9EFvOA20erHYzjp7XfOUU3PT5Dwzo3YfnFUFqOwGJkmf6srsY1A+dLI0PaP0Yxl9LwOlPcRcENkvkDf7EeDtfLfExbWZoynJG819aqi5fKwGFOTJmagYpgUW4giK7s72O+y4pwlPa2362QFu+7QENXB4hK6Kzi1PfV8TnNlQCNd7VKNSlE36+pDyDC7pae2XlM+KcYmVlK4RAH9xurUW2XuT67o="
+
 before_install:
   - sudo apt-get install python-protobuf python-crypto
   - sudo apt-get install linux-headers-$(uname -r)
+  - echo -n | openssl s_client -connect https://scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
 
 before_script:
   - git clone https://github.com/01org/linux-sgx-driver.git -b sgx_driver_$ISGX_DRIVER_VERSION
 
-script:
-  - make 
-  - cd $TRAVIS_BUILD_DIR/Pal/src && make clean && make SGX=1
-  - cd $TRAVIS_BUILD_DIR/Pal/src && make clean && make DEBUG=1
-  - cd $TRAVIS_BUILD_DIR/Pal/src && make clean && make SGX=1 DEBUG=1
-  - cd $TRAVIS_BUILD_DIR/Pal/src/host/Linux-SGX/sgx-driver && make
+addons:
+  coverity_scan:
+    project:
+      name: "bigdata-memory/graphene"
+      description: "code analysis"
+    notification_email: gang1.wang@intel.com
+    build_command_prepend: ""
+    build_command: "make"
+    branch_pattern: analysis
 
+
+script:
+  - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then make ; fi
 
 matrix:
   include:
