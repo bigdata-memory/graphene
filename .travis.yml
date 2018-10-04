@@ -22,11 +22,11 @@ addons:
 
 script:
   - if [ "${COVERITY_SCAN_BRANCH}" == 1 ]; then echo "Do not build on analysis branch.";exit 0; fi
-  - make
-  - cd $TRAVIS_BUILD_DIR/Pal/src && make clean && make SGX=1
-  - cd $TRAVIS_BUILD_DIR/Pal/src && make clean && make DEBUG=1
-  - cd $TRAVIS_BUILD_DIR/Pal/src && make clean && make SGX=1 DEBUG=1
-  - cd $TRAVIS_BUILD_DIR/Pal/src/host/Linux-SGX/sgx-driver && make
+#  - make
+#  - cd $TRAVIS_BUILD_DIR/Pal/src && make clean && make SGX=1
+#  - cd $TRAVIS_BUILD_DIR/Pal/src && make clean && make DEBUG=1
+#  - cd $TRAVIS_BUILD_DIR/Pal/src && make clean && make SGX=1 DEBUG=1
+#  - cd $TRAVIS_BUILD_DIR/Pal/src/host/Linux-SGX/sgx-driver && make
 
 matrix:
   include:
