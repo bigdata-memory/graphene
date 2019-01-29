@@ -178,7 +178,6 @@ int load_enclave_binary (sgx_arch_secs_t * secs, int fd,
             c->prot = (ph->p_flags & PF_R ? PROT_READ  : 0)|
                       (ph->p_flags & PF_W ? PROT_WRITE : 0)|
                       (ph->p_flags & PF_X ? PROT_EXEC  : 0)|prot;
-#define SGX_SECINFO_FLAGS_R             0x001
         }
 
     base -= loadcmds[0].mapstart;
@@ -681,16 +680,10 @@ static int load_enclave (struct pal_enclave * enclave,
 #endif
 
     ret = open_gsgx();
-    if (ret < 0) {
-        SGX_DBG(DBG_E, "cannot open device /dev/gsgx, possibly the kernel "
-                "module is not loaded.\n");
-        return ret;
-    }
-
-    ret = check_wrfsbase_support();
     if (ret < 0)
         return ret;
-    if (!ret)
+
+    if (!is_wrfsbase_supported())
         return -EPERM;
 
     INLINE_SYSCALL(gettimeofday, 2, &tv, NULL);

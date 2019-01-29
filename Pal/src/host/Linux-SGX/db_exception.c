@@ -45,11 +45,6 @@ typedef struct exception_event {
     struct pal_frame *  frame;
 } PAL_EVENT;
 
-#define save_return_point(ptr)                      \
-    asm volatile ("leaq 0(%%rip), %%rax\r\n"        \
-                  "movq %%rax, %0\r\n"              \
-                  : "=b"(ptr) :: "memory", "rax")
-
 void _DkGenericEventTrigger (PAL_IDX event_num, PAL_EVENT_HANDLER upcall,
                              PAL_NUM arg, struct pal_frame * frame,
                              PAL_CONTEXT * context)
@@ -241,6 +236,8 @@ void _DkExceptionHandler (unsigned int exit_info, sgx_context_t * uc)
             restore_sgx_context(uc);
             return;
         }
+        SGX_DBG(DBG_E, "Illegal instruction executed in enclave\n");    
+        ocall_exit(1);
     }
 
     switch (ei.info.vector) {
